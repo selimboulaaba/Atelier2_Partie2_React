@@ -1,22 +1,23 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import React, { Suspense, useState } from 'react'
 import './App.css'
-import Events from './components/Events';
 import { Route, Routes } from 'react-router-dom';
-import NotFound from './components/NotFound';
-import EventDetail from './components/EventDetail';
 
 function App() {
 
+  const Events = React.lazy(() => import('./components/Events'))
+  const EventDetail = React.lazy(() => import('./components/EventDetail'))
+  const NotFound = React.lazy(() => import('./components/NotFound'))
+
   return (
-    <Routes>
-      <Route path="/events">
-        <Route path="" element={<Events/>}/>
-        <Route path=":id" element={<EventDetail/>}/>
-      </Route>
-      <Route path="*" element={<NotFound/>}/>  
-    </Routes>
+    <Suspense fallback={<h1>Loading..</h1>}>
+      <Routes>
+        <Route path="/events">
+          <Route path="" element={<Events />} />
+          <Route path=":id" element={<EventDetail />} />
+        </Route>
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </Suspense>
   )
 }
 
